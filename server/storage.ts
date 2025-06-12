@@ -55,7 +55,7 @@ export class DatabaseStorage implements IStorage {
     if (search) {
       const searchTerm = `%${search}%`;
       conditions.push(
-        sql`(${notices.title} ILIKE ${searchTerm} OR ${notices.lawyerName} ILIKE ${searchTerm})`
+        sql`(${notices.title} ILIKE ${searchTerm} OR ${notices.lawyerName} ILIKE ${searchTerm} OR ${notices.location} ILIKE ${searchTerm})`
       );
     }
 
@@ -84,7 +84,7 @@ export class DatabaseStorage implements IStorage {
     if (search) {
       const searchTerm = `%${search}%`;
       conditions.push(
-        sql`(${notices.title} ILIKE ${searchTerm} OR ${notices.lawyerName} ILIKE ${searchTerm})`
+        sql`(${notices.title} ILIKE ${searchTerm} OR ${notices.lawyerName} ILIKE ${searchTerm} OR ${notices.location} ILIKE ${searchTerm})`
       );
     }
 

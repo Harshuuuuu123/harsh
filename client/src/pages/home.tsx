@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNotices } from "@/hooks/use-notices";
+import { useDebounce } from "@/hooks/use-debounce";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryFilters } from "@/components/CategoryFilters";
 import { NoticeCard } from "@/components/NoticeCard";
@@ -13,6 +14,9 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
+  // Debounce search query to reduce API calls
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   const {
     notices,
     isLoading,
@@ -20,7 +24,7 @@ export default function Home() {
     fetchNextPage,
     isFetchingNextPage,
     categoryCounts
-  } = useNotices({ search: searchQuery, category: activeCategory });
+  } = useNotices({ search: debouncedSearchQuery, category: activeCategory });
 
   const allNotices = notices?.pages?.flatMap(page => page.notices) || [];
 
