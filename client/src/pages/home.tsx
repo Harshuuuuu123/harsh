@@ -42,17 +42,14 @@ export default function Home() {
                 <h1 className="text-lg font-semibold text-gray-900">Jahir Soochna</h1>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-slate bg-gray-100 px-2 py-1 rounded">JS</span>
-              <Button 
-                onClick={() => setIsUploadModalOpen(true)}
-                className="bg-navy hover:bg-navy text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Upload Notice</span>
-                <span className="sm:hidden">Upload</span>
-              </Button>
-            </div>
+            <Button 
+              onClick={() => setIsUploadModalOpen(true)}
+              className="bg-navy hover:bg-navy text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Upload Notice</span>
+              <span className="sm:hidden">Upload</span>
+            </Button>
           </div>
         </div>
       </header>

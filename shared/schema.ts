@@ -12,6 +12,7 @@ export const notices = pgTable("notices", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   lawyerName: text("lawyer_name").notNull(),
+  location: text("location"),
   category: varchar("category", { length: 50 }).notNull(),
   fileName: text("file_name").notNull(),
   filePath: text("file_path").notNull(),

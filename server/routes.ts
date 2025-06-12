@@ -151,6 +151,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files
   app.use('/uploads', express.static('uploads'));
 
+  // Download file endpoint
+  app.get("/api/notices/:id/download", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const notice = await storage.getNotice(id);
+      
+      if (!notice) {
+        return res.status(404).json({ message: "Notice not found" });
+      }
+
+      const filePath = path.resolve(notice.filePath);
+      res.download(filePath, notice.fileName, (err) => {
+        if (err) {
+          console.error('Download error:', err);
+          res.status(500).json({ message: "File download failed" });
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to download file" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

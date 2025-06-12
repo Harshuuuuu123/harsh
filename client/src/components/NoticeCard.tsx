@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Eye, AlertTriangle, User, Calendar, FileText } from "lucide-react";
+import { Eye, AlertTriangle, User, Calendar, FileText, MapPin, Download, ExternalLink } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface NoticeCardProps {
@@ -73,12 +73,45 @@ export function NoticeCard({ notice }: NoticeCardProps) {
     return <FileText className="h-8 w-8 text-gray-500" />;
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+  const formatDate = (dateInput: string | Date) => {
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
     });
+  };
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(`/api/notices/${notice.id}/download`);
+      if (!response.ok) throw new Error('Download failed');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = notice.fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast({
+        title: "Download Started",
+        description: "File download has begun.",
+      });
+    } catch (error) {
+      toast({
+        title: "Download Failed",
+        description: "Unable to download the file.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const openInNewTab = () => {
+    window.open(`/${notice.filePath}`, '_blank');
   };
 
   return (
@@ -112,6 +145,12 @@ export function NoticeCard({ notice }: NoticeCardProps) {
                 <Calendar className="h-4 w-4 mr-2" />
                 {formatDate(notice.uploadDate)}
               </p>
+              {notice.location && (
+                <p className="flex items-center text-gray-500">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  {notice.location}
+                </p>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <Button 
@@ -135,28 +174,113 @@ export function NoticeCard({ notice }: NoticeCardProps) {
 
       {/* View Modal */}
       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className="max-w-4xl w-full h-[80vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle>Notice Document</DialogTitle>
+        <DialogContent className="max-w-5xl w-full h-[85vh] flex flex-col">
+          <DialogHeader className="border-b pb-4">
+            <DialogTitle className="text-xl font-semibold">Notice Details</DialogTitle>
           </DialogHeader>
-          <div className="flex-1 p-4">
-            {notice.fileType.includes('pdf') ? (
-              <iframe 
-                src={`/${notice.filePath}`}
-                className="w-full h-full border-0 rounded"
-                title="Notice Document"
-              />
-            ) : notice.fileType.includes('image') ? (
-              <img 
-                src={`/${notice.filePath}`}
-                alt="Notice Document"
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-slate">Document preview not available. Click to download.</p>
+          
+          <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6">
+            {/* Document Preview */}
+            <div className="flex-1 bg-gray-50 rounded-lg overflow-hidden">
+              {notice.fileType.includes('pdf') ? (
+                <iframe 
+                  src={`/${notice.filePath}`}
+                  className="w-full h-full border-0"
+                  title="Notice Document"
+                />
+              ) : notice.fileType.includes('image') ? (
+                <img 
+                  src={`/${notice.filePath}`}
+                  alt="Notice Document"
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    {getFileIcon()}
+                    <p className="text-gray-500 mt-4">Document preview not available</p>
+                    <Button 
+                      onClick={handleDownload}
+                      className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download to View
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Notice Information */}
+            <div className="lg:w-80 bg-white rounded-lg border p-6 space-y-4">
+              <div>
+                <h3 className="font-semibold text-gray-900 text-lg mb-3">{notice.title}</h3>
               </div>
-            )}
+
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <User className="h-5 w-5 text-gray-400 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-gray-500">Advocate</p>
+                    <p className="font-medium text-gray-900">{notice.lawyerName}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <Calendar className="h-5 w-5 text-gray-400 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-gray-500">Upload Date</p>
+                    <p className="font-medium text-gray-900">{formatDate(notice.uploadDate)}</p>
+                  </div>
+                </div>
+
+                {notice.location && (
+                  <div className="flex items-start space-x-3">
+                    <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-gray-500">Location</p>
+                      <p className="font-medium text-gray-900">{notice.location}</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-start space-x-3">
+                  <FileText className="h-5 w-5 text-gray-400 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-gray-500">Document</p>
+                    <p className="font-medium text-gray-900">{notice.fileName}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 space-y-3">
+                <Button 
+                  onClick={openInNewTab}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  View Full Document
+                </Button>
+                
+                <Button 
+                  onClick={handleDownload}
+                  variant="outline"
+                  className="w-full py-2.5"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download
+                </Button>
+
+                <Button 
+                  onClick={() => setIsObjectionModalOpen(true)}
+                  variant="outline"
+                  className="w-full py-2.5 border-red-200 text-red-600 hover:bg-red-50"
+                >
+                  <AlertTriangle className="h-4 w-4 mr-2" />
+                  File Objection
+                </Button>
+              </div>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
