@@ -81,11 +81,34 @@ export default function Home() {
             {/* Left Side - Logo and Name */}
             <div className="flex items-center">
               <div className="flex items-center">
-                <svg className="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1L9 7V9C9 10.1 9.9 11 11 11V16L9.5 17.5L10.91 18.91L12 17.83L13.09 18.91L14.5 17.5L13 16V11C14.1 11 15 10.1 15 9H21Z" fill="#2c3e50"/>
-                  <circle cx="12" cy="4" r="1.5" fill="white"/>
+                <svg className="h-8 w-8 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Scales of Justice */}
+                  <g transform="translate(2, 1)">
+                    {/* Central pillar */}
+                    <line x1="10" y1="2" x2="10" y2="20" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
+                    {/* Top ornament */}
+                    <circle cx="10" cy="2" r="1" fill="#1e3a8a"/>
+                    {/* Horizontal beam */}
+                    <line x1="4" y1="6" x2="16" y1="6" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
+                    {/* Left scale */}
+                    <path d="M2 10 L6 8 L6 12 Z" fill="#1e3a8a" opacity="0.8"/>
+                    <line x1="4" y1="6" x2="4" y2="8" stroke="#1e3a8a" strokeWidth="1"/>
+                    <ellipse cx="4" cy="10" rx="2.5" ry="0.8" fill="none" stroke="#1e3a8a" strokeWidth="1"/>
+                    {/* Right scale */}
+                    <path d="M18 10 L14 8 L14 12 Z" fill="#1e3a8a" opacity="0.8"/>
+                    <line x1="16" y1="6" x2="16" y2="8" stroke="#1e3a8a" strokeWidth="1"/>
+                    <ellipse cx="16" cy="10" rx="2.5" ry="0.8" fill="none" stroke="#1e3a8a" strokeWidth="1"/>
+                    {/* Base */}
+                    <rect x="7" y="18" width="6" height="2" rx="1" fill="#1e3a8a"/>
+                    {/* Decorative elements */}
+                    <circle cx="6" cy="4" r="0.5" fill="#1e3a8a" opacity="0.6"/>
+                    <circle cx="14" cy="4" r="0.5" fill="#1e3a8a" opacity="0.6"/>
+                  </g>
                 </svg>
-                <h1 className="text-lg font-semibold text-gray-900">Jahir Soochna</h1>
+                <div className="flex flex-col">
+                  <h1 className="text-xl font-bold text-gray-900 leading-tight">Jahir Soochna</h1>
+                  <p className="text-xs text-gray-600 font-medium tracking-wide">LEGAL NOTICE PLATFORM</p>
+                </div>
               </div>
             </div>
 
