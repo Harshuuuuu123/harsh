@@ -7,7 +7,7 @@ interface CategoryFiltersProps {
 }
 
 const categories = [
-  { key: "all", label: "Home" },
+  { key: "all", label: "All" },
   { key: "land", label: "Land" },
   { key: "namechange", label: "Name Change" },
   { key: "property", label: "Property Dispute" },
