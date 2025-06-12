@@ -44,9 +44,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const limit = parseInt(req.query.limit as string) || 10;
       const category = req.query.category as string;
       const search = req.query.search as string;
+      const dateFilter = req.query.dateFilter as string;
+      const sortBy = req.query.sortBy as string;
 
-      const notices = await storage.getNotices({ page, limit, category, search });
-      const total = await storage.getNoticesCount({ category, search });
+      const notices = await storage.getNotices({ page, limit, category, search, dateFilter, sortBy });
+      const total = await storage.getNoticesCount({ category, search, dateFilter });
 
       res.json({
         notices,

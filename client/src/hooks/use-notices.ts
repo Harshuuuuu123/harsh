@@ -12,11 +12,13 @@ interface NoticesResponse {
 interface UseNoticesOptions {
   search?: string;
   category?: string;
+  dateFilter?: string;
+  sortBy?: string;
 }
 
-export function useNotices({ search, category }: UseNoticesOptions = {}) {
+export function useNotices({ search, category, dateFilter, sortBy }: UseNoticesOptions = {}) {
   const noticesQuery = useInfiniteQuery({
-    queryKey: ["/api/notices", { search, category }],
+    queryKey: ["/api/notices", { search, category, dateFilter, sortBy }],
     queryFn: async ({ pageParam = 1 }) => {
       const params = new URLSearchParams({
         page: pageParam.toString(),
@@ -25,6 +27,8 @@ export function useNotices({ search, category }: UseNoticesOptions = {}) {
       
       if (search) params.append("search", search);
       if (category && category !== "all") params.append("category", category);
+      if (dateFilter && dateFilter !== "all") params.append("dateFilter", dateFilter);
+      if (sortBy) params.append("sortBy", sortBy);
 
       const response = await fetch(`/api/notices?${params}`, {
         credentials: "include",

@@ -40,8 +40,15 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getNotices(options: { page: number; limit: number; category?: string; search?: string }): Promise<Notice[]> {
-    const { page, limit, category, search } = options;
+  async getNotices(options: { 
+    page: number; 
+    limit: number; 
+    category?: string; 
+    search?: string;
+    dateFilter?: string;
+    sortBy?: string;
+  }): Promise<Notice[]> {
+    const { page, limit, category, search, dateFilter, sortBy } = options;
     const offset = (page - 1) * limit;
 
     let conditions = [eq(notices.isActive, true)];
@@ -59,19 +66,62 @@ export class DatabaseStorage implements IStorage {
       );
     }
 
+    // Apply date filter
+    if (dateFilter) {
+      const now = new Date();
+      let dateCondition;
+      
+      switch (dateFilter) {
+        case 'today':
+          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+          dateCondition = sql`${notices.uploadDate} >= ${todayStart} AND ${notices.uploadDate} < ${todayEnd}`;
+          break;
+        case 'last7days':
+          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          dateCondition = sql`${notices.uploadDate} >= ${sevenDaysAgo}`;
+          break;
+        case 'thismonth':
+          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+          dateCondition = sql`${notices.uploadDate} >= ${monthStart} AND ${notices.uploadDate} < ${monthEnd}`;
+          break;
+      }
+      
+      if (dateCondition) {
+        conditions.push(dateCondition);
+      }
+    }
+
+    // Determine sort order
+    let orderBy;
+    switch (sortBy) {
+      case 'oldest':
+        orderBy = notices.uploadDate;
+        break;
+      case 'newest':
+      default:
+        orderBy = desc(notices.uploadDate);
+        break;
+    }
+
     const result = await db
       .select()
       .from(notices)
       .where(and(...conditions))
-      .orderBy(desc(notices.uploadDate))
+      .orderBy(orderBy)
       .limit(limit)
       .offset(offset);
 
     return result;
   }
 
-  async getNoticesCount(options: { category?: string; search?: string }): Promise<number> {
-    const { category, search } = options;
+  async getNoticesCount(options: { 
+    category?: string; 
+    search?: string;
+    dateFilter?: string;
+  }): Promise<number> {
+    const { category, search, dateFilter } = options;
 
     let conditions = [eq(notices.isActive, true)];
 
@@ -86,6 +136,33 @@ export class DatabaseStorage implements IStorage {
       conditions.push(
         sql`(${notices.title} ILIKE ${searchTerm} OR ${notices.lawyerName} ILIKE ${searchTerm} OR ${notices.location} ILIKE ${searchTerm})`
       );
+    }
+
+    // Apply date filter
+    if (dateFilter) {
+      const now = new Date();
+      let dateCondition;
+      
+      switch (dateFilter) {
+        case 'today':
+          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+          dateCondition = sql`${notices.uploadDate} >= ${todayStart} AND ${notices.uploadDate} < ${todayEnd}`;
+          break;
+        case 'last7days':
+          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          dateCondition = sql`${notices.uploadDate} >= ${sevenDaysAgo}`;
+          break;
+        case 'thismonth':
+          const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+          const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+          dateCondition = sql`${notices.uploadDate} >= ${monthStart} AND ${notices.uploadDate} < ${monthEnd}`;
+          break;
+      }
+      
+      if (dateCondition) {
+        conditions.push(dateCondition);
+      }
     }
 
     const [result] = await db

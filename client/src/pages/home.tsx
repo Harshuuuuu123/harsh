@@ -3,6 +3,7 @@ import { useNotices } from "@/hooks/use-notices";
 import { useDebounce } from "@/hooks/use-debounce";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryFilters } from "@/components/CategoryFilters";
+import { FilterControls } from "@/components/FilterControls";
 import { NoticeCard } from "@/components/NoticeCard";
 import { UploadModal } from "@/components/UploadModal";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
@@ -13,6 +14,8 @@ export default function Home() {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +46,12 @@ export default function Home() {
     fetchNextPage,
     isFetchingNextPage,
     categoryCounts
-  } = useNotices({ search: debouncedSearchQuery, category: activeCategory });
+  } = useNotices({ 
+    search: debouncedSearchQuery, 
+    category: activeCategory,
+    dateFilter,
+    sortBy
+  });
 
   const allNotices = notices?.pages?.flatMap(page => page.notices) || [];
 
@@ -149,6 +157,16 @@ export default function Home() {
         onCategoryChange={setActiveCategory}
         categoryCounts={categoryCounts}
       />
+
+      {/* Filter Controls */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <FilterControls
+          dateFilter={dateFilter}
+          sortBy={sortBy}
+          onDateFilterChange={setDateFilter}
+          onSortByChange={setSortBy}
+        />
+      </div>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
