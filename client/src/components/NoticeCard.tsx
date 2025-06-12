@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Notice } from "@shared/schema";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ interface NoticeCardProps {
   notice: Notice;
 }
 
-export function NoticeCard({ notice }: NoticeCardProps) {
+function NoticeCardComponent({ notice }: NoticeCardProps) {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isObjectionModalOpen, setIsObjectionModalOpen] = useState(false);
   const [objectionForm, setObjectionForm] = useState({
@@ -366,3 +366,5 @@ export function NoticeCard({ notice }: NoticeCardProps) {
     </>
   );
 }
+
+export const NoticeCard = memo(NoticeCardComponent);

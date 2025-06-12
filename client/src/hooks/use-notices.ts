@@ -20,7 +20,7 @@ export function useNotices({ search, category }: UseNoticesOptions = {}) {
     queryFn: async ({ pageParam = 1 }) => {
       const params = new URLSearchParams({
         page: pageParam.toString(),
-        limit: "10",
+        limit: "15",
       });
       
       if (search) params.append("search", search);
@@ -40,6 +40,8 @@ export function useNotices({ search, category }: UseNoticesOptions = {}) {
       return lastPage.hasMore ? lastPage.page + 1 : undefined;
     },
     initialPageParam: 1,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   const categoryCountsQuery = useQuery({
@@ -55,6 +57,8 @@ export function useNotices({ search, category }: UseNoticesOptions = {}) {
       
       return response.json() as Promise<Record<string, number>>;
     },
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
   });
 
   return {

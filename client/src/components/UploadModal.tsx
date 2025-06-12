@@ -16,6 +16,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
   const [formData, setFormData] = useState({
     title: "",
     lawyerName: "",
+    location: "",
     category: "",
   });
   const [file, setFile] = useState<File | null>(null);
@@ -58,7 +59,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
   });
 
   const handleClose = () => {
-    setFormData({ title: "", lawyerName: "", category: "" });
+    setFormData({ title: "", lawyerName: "", location: "", category: "" });
     setFile(null);
     setDragActive(false);
     onClose();
@@ -79,6 +80,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
     const data = new FormData();
     data.append("title", formData.title);
     data.append("lawyerName", formData.lawyerName);
+    data.append("location", formData.location);
     data.append("category", formData.category);
     data.append("file", file);
 
@@ -177,6 +179,18 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
               onChange={(e) => setFormData(prev => ({ ...prev, lawyerName: e.target.value }))}
               placeholder="Enter lawyer name"
               required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-dark-grey mb-2">
+              Location
+            </label>
+            <Input
+              type="text"
+              value={formData.location}
+              onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+              placeholder="Enter location (optional)"
             />
           </div>
 

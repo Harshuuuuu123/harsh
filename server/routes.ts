@@ -80,6 +80,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const noticeData = {
         title: req.body.title,
         lawyerName: req.body.lawyerName,
+        location: req.body.location || null,
         category: req.body.category,
         fileName: req.file.originalname,
         filePath: req.file.path,
