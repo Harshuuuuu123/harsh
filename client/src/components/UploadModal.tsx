@@ -207,10 +207,14 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="home">Home</SelectItem>
                 <SelectItem value="land">Land</SelectItem>
                 <SelectItem value="namechange">Name Change</SelectItem>
                 <SelectItem value="property">Property Dispute</SelectItem>
-                <SelectItem value="legal">Legal Claim</SelectItem>
+                <SelectItem value="legal">Legal</SelectItem>
+                <SelectItem value="public">Public Notice</SelectItem>
+                <SelectItem value="court">Court Notice</SelectItem>
+                <SelectItem value="tender">Tender</SelectItem>
               </SelectContent>
             </Select>
           </div>
