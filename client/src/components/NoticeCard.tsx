@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Eye, AlertTriangle, User, Calendar, FileText, MapPin, Download, ExternalLink } from "lucide-react";
+import { Eye, AlertTriangle, User, Calendar, FileText, MapPin, Download, ExternalLink, FileImage, File } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface NoticeCardProps {
@@ -24,6 +24,8 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+
 
   const objectionMutation = useMutation({
     mutationFn: (data: typeof objectionForm) =>
@@ -65,12 +67,14 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
 
   const getFileIcon = () => {
     if (notice.fileType.includes('pdf')) {
-      return <FileText className="h-8 w-8 text-red-500" />;
+      return <FileText className="h-16 w-16 text-red-500" />;
+    } else if (notice.fileType.includes('image')) {
+      return <FileImage className="h-16 w-16 text-blue-500" />;
+    } else if (notice.fileType.includes('word') || notice.fileType.includes('document')) {
+      return <FileText className="h-16 w-16 text-blue-600" />;
+    } else {
+      return <File className="h-16 w-16 text-gray-500" />;
     }
-    if (notice.fileType.includes('doc')) {
-      return <FileText className="h-8 w-8 text-blue-500" />;
-    }
-    return <FileText className="h-8 w-8 text-gray-500" />;
   };
 
   const formatDate = (dateInput: string | Date) => {

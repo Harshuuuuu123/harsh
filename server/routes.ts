@@ -115,6 +115,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Download notice file
+  app.get("/api/notices/:id/download", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const notice = await storage.getNotice(id);
+      
+      if (!notice) {
+        return res.status(404).json({ message: "Notice not found" });
+      }
+
+      res.download(notice.filePath, notice.fileName);
+    } catch (error) {
+      console.error("Download error:", error);
+      res.status(500).json({ message: "Failed to download file" });
+    }
+  });
+
   // File objection against notice
   app.post("/api/notices/:id/objections", async (req, res) => {
     try {
