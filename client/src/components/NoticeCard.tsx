@@ -139,7 +139,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
               <img 
                 src={`/${notice.filePath}`}
                 alt="Notice preview" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
               <div className="text-center text-gray-500 p-4">

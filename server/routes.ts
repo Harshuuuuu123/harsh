@@ -101,6 +101,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Upload generated notice image
+  app.post("/api/notices/generated", async (req, res) => {
+    try {
+      const { imageData, title, lawyerName, location, category } = req.body;
+      
+      if (!imageData || !title || !lawyerName) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Convert base64 to buffer
+      const base64Data = imageData.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, 'base64');
+      
+      // Generate unique filename
+      const fileName = `generated-notice-${Date.now()}.png`;
+      const filePath = `uploads/${fileName}`;
+      
+      // Save file
+      const fs = require('fs');
+      fs.writeFileSync(filePath, buffer);
+
+      const noticeData = {
+        title,
+        lawyerName,
+        location: location || null,
+        category: category || 'public',
+        fileName,
+        filePath,
+        fileType: 'image/png'
+      };
+
+      const validatedData = insertNoticeSchema.parse(noticeData);
+      const notice = await storage.createNotice(validatedData);
+
+      res.status(201).json(notice);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to save generated notice" });
+    }
+  });
+
   // Get single notice
   app.get("/api/notices/:id", async (req, res) => {
     try {

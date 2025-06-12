@@ -6,12 +6,14 @@ import { CategoryFilters } from "@/components/CategoryFilters";
 import { FilterControls } from "@/components/FilterControls";
 import { NoticeCard } from "@/components/NoticeCard";
 import { UploadModal } from "@/components/UploadModal";
+import { NoticeTemplateGenerator } from "@/components/NoticeTemplateGenerator";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
 import { Button } from "@/components/ui/button";
-import { Plus, Menu, X } from "lucide-react";
+import { Plus, Menu, X, FileImage } from "lucide-react";
 
 export default function Home() {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isTemplateGeneratorOpen, setIsTemplateGeneratorOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
@@ -113,7 +115,17 @@ export default function Home() {
             </div>
 
             {/* Right Side - Upload Button and Menu */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
+              <Button 
+                onClick={() => setIsTemplateGeneratorOpen(true)}
+                variant="outline"
+                className="px-3 py-2 border-navy text-navy hover:bg-navy hover:text-white transition-colors"
+              >
+                <FileImage className="h-4 w-4 mr-1" />
+                <span className="hidden md:inline">Generate Notice</span>
+                <span className="md:hidden">Generate</span>
+              </Button>
+              
               <Button 
                 onClick={() => setIsUploadModalOpen(true)}
                 className="bg-navy hover:bg-navy text-white px-4 py-2 rounded-lg transition-colors"
@@ -234,6 +246,12 @@ export default function Home() {
       <UploadModal
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}
+      />
+
+      {/* Notice Template Generator */}
+      <NoticeTemplateGenerator
+        isOpen={isTemplateGeneratorOpen}
+        onClose={() => setIsTemplateGeneratorOpen(false)}
       />
     </div>
   );
