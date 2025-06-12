@@ -34,8 +34,14 @@ export default function Home() {
               <Button variant="ghost" size="sm" className="md:hidden p-2">
                 <Menu className="h-5 w-5 text-slate" />
               </Button>
-              <h1 className="text-xl font-bold text-navy ml-2 md:ml-0">Jahir Soochna</h1>
-              <span className="ml-2 text-sm text-slate hidden sm:inline">JS</span>
+              <div className="flex items-center ml-2 md:ml-0">
+                <svg className="h-8 w-8 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="#1e3a8a" stroke="#1e3a8a" strokeWidth="2"/>
+                  <circle cx="12" cy="12" r="3" fill="white"/>
+                  <path d="M12 10.5V13.5M10.5 12H13.5" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+                <h1 className="text-xl font-bold text-navy">Jahir Soochna</h1>
+              </div>
             </div>
             <Button 
               onClick={() => setIsUploadModalOpen(true)}
