@@ -31,26 +31,28 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Button variant="ghost" size="sm" className="md:hidden p-2">
+              <Button variant="ghost" size="sm" className="p-2">
                 <Menu className="h-5 w-5 text-slate" />
               </Button>
-              <div className="flex items-center ml-2 md:ml-0">
-                <svg className="h-8 w-8 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="#1e3a8a" stroke="#1e3a8a" strokeWidth="2"/>
-                  <circle cx="12" cy="12" r="3" fill="white"/>
-                  <path d="M12 10.5V13.5M10.5 12H13.5" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
+              <div className="flex items-center ml-2">
+                <svg className="h-6 w-6 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1L9 7V9C9 10.1 9.9 11 11 11V16L9.5 17.5L10.91 18.91L12 17.83L13.09 18.91L14.5 17.5L13 16V11C14.1 11 15 10.1 15 9H21Z" fill="#2c3e50"/>
+                  <circle cx="12" cy="4" r="1.5" fill="white"/>
                 </svg>
-                <h1 className="text-xl font-bold text-navy">Jahir Soochna</h1>
+                <h1 className="text-lg font-semibold text-gray-900">Jahir Soochna</h1>
               </div>
             </div>
-            <Button 
-              onClick={() => setIsUploadModalOpen(true)}
-              className="bg-navy hover:bg-navy text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Upload Notice</span>
-              <span className="sm:hidden">Upload</span>
-            </Button>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-slate bg-gray-100 px-2 py-1 rounded">JS</span>
+              <Button 
+                onClick={() => setIsUploadModalOpen(true)}
+                className="bg-navy hover:bg-navy text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Upload Notice</span>
+                <span className="sm:hidden">Upload</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>

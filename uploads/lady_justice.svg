@@ -1,0 +1,63 @@
+<svg width="300" height="400" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="400" fill="#f8f9fa"/>
+  
+  <!-- Lady Justice Figure -->
+  <g transform="translate(150, 50)">
+    <!-- Head -->
+    <circle cx="0" cy="40" r="20" fill="#d4af8c" stroke="#b8956f" stroke-width="1"/>
+    
+    <!-- Blindfold -->
+    <rect x="-18" y="35" width="36" height="8" fill="#2c3e50" rx="4"/>
+    
+    <!-- Hair -->
+    <path d="M-20 25 Q0 15 20 25 Q15 35 0 35 Q-15 35 -20 25 Z" fill="#8b6914"/>
+    
+    <!-- Body -->
+    <rect x="-15" y="60" width="30" height="80" fill="#e8dcc6" rx="5"/>
+    
+    <!-- Robe -->
+    <path d="M-25 80 L-15 60 L15 60 L25 80 L30 180 L-30 180 Z" fill="#4a5568"/>
+    <path d="M-20 100 L20 100 L25 170 L-25 170 Z" fill="#2d3748"/>
+    
+    <!-- Arms -->
+    <circle cx="-35" cy="90" r="8" fill="#d4af8c"/>
+    <circle cx="35" cy="90" r="8" fill="#d4af8c"/>
+    <rect x="-40" y="85" width="10" height="25" fill="#d4af8c" rx="5"/>
+    <rect x="35" y="85" width="10" height="25" fill="#d4af8c" rx="5"/>
+    
+    <!-- Left scale -->
+    <g transform="translate(-60, 110)">
+      <line x1="0" y1="0" x2="0" y2="15" stroke="#ffd700" stroke-width="2"/>
+      <line x1="-15" y1="15" x2="15" y2="15" stroke="#ffd700" stroke-width="2"/>
+      <rect x="-12" y="15" width="8" height="6" fill="#ffd700" rx="2"/>
+      <rect x="4" y="15" width="8" height="6" fill="#ffd700" rx="2"/>
+      <line x1="-8" y1="21" x2="-8" y2="25" stroke="#ffd700"/>
+      <line x1="8" y1="21" x2="8" y2="25" stroke="#ffd700"/>
+    </g>
+    
+    <!-- Right scale -->
+    <g transform="translate(60, 110)">
+      <line x1="0" y1="0" x2="0" y2="15" stroke="#ffd700" stroke-width="2"/>
+      <line x1="-15" y1="15" x2="15" y2="15" stroke="#ffd700" stroke-width="2"/>
+      <rect x="-12" y="15" width="8" height="6" fill="#ffd700" rx="2"/>
+      <rect x="4" y="15" width="8" height="6" fill="#ffd700" rx="2"/>
+      <line x1="-8" y1="21" x2="-8" y2="25" stroke="#ffd700"/>
+      <line x1="8" y1="21" x2="8" y2="25" stroke="#ffd700"/>
+    </g>
+    
+    <!-- Sword -->
+    <g transform="translate(0, 180)">
+      <rect x="-2" y="0" width="4" height="40" fill="#c0c0c0"/>
+      <rect x="-8" y="-5" width="16" height="8" fill="#ffd700"/>
+      <circle cx="0" cy="-8" r="3" fill="#ffd700"/>
+    </g>
+  </g>
+  
+  <!-- Classical columns on sides -->
+  <rect x="20" y="300" width="15" height="80" fill="#e2e8f0"/>
+  <rect x="265" y="300" width="15" height="80" fill="#e2e8f0"/>
+  
+  <!-- Base -->
+  <rect x="0" y="380" width="300" height="20" fill="#cbd5e0"/>
+</svg>

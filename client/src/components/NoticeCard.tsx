@@ -85,7 +85,7 @@ export function NoticeCard({ notice }: NoticeCardProps) {
     <>
       <Card className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
         <div className="flex flex-col sm:flex-row">
-          <div className="sm:w-48 h-48 sm:h-auto bg-gray-100 flex items-center justify-center">
+          <div className="sm:w-64 h-48 sm:h-auto bg-gray-50 flex items-center justify-center">
             {notice.fileType.includes('image') ? (
               <img 
                 src={`/${notice.filePath}`}
@@ -93,37 +93,37 @@ export function NoticeCard({ notice }: NoticeCardProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="text-center text-gray-500">
+              <div className="text-center text-gray-500 p-4">
                 {getFileIcon()}
-                <p className="text-sm mt-2">{notice.fileType.includes('pdf') ? 'PDF Document' : 'Document'}</p>
+                <p className="text-sm mt-2 font-medium">{notice.fileType.includes('pdf') ? 'PDF Document' : 'Document'}</p>
               </div>
             )}
           </div>
-          <div className="flex-1 p-4 sm:p-6">
-            <h3 className="text-lg font-semibold text-dark-grey mb-2">
+          <div className="flex-1 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3 leading-tight">
               {notice.title}
             </h3>
-            <div className="text-sm text-slate mb-4 space-y-1">
+            <div className="text-sm text-gray-600 mb-4 space-y-2">
               <p className="flex items-center">
-                <User className="h-4 w-4 mr-2" />
+                <User className="h-4 w-4 mr-2 text-gray-500" />
                 {notice.lawyerName}
               </p>
-              <p className="flex items-center">
+              <p className="flex items-center text-gray-500">
                 <Calendar className="h-4 w-4 mr-2" />
                 {formatDate(notice.uploadDate)}
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
               <Button 
                 onClick={() => setIsViewModalOpen(true)}
-                className="flex-1 bg-success hover:bg-success text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                className="flex-1 bg-gray-800 hover:bg-gray-900 text-white py-2.5 px-4 rounded-md transition-colors flex items-center justify-center font-medium"
               >
                 <Eye className="h-4 w-4 mr-2" />
                 View
               </Button>
               <Button 
                 onClick={() => setIsObjectionModalOpen(true)}
-                className="flex-1 bg-danger hover:bg-danger text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                className="flex-1 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 py-2.5 px-4 rounded-md transition-colors flex items-center justify-center font-medium"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Against
