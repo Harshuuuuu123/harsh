@@ -86,6 +86,18 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
     });
   };
 
+  const formatDateTime = (dateInput: string | Date) => {
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
   const handleDownload = async () => {
     try {
       const response = await fetch(`/api/notices/${notice.id}/download`);
@@ -147,7 +159,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
               </p>
               <p className="flex items-center text-gray-500">
                 <Calendar className="h-4 w-4 mr-2" />
-                {formatDate(notice.uploadDate)}
+                {formatDateTime(notice.uploadDate)}
               </p>
               {notice.location && (
                 <p className="flex items-center text-gray-500">
@@ -233,8 +245,8 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                 <div className="flex items-start space-x-3">
                   <Calendar className="h-5 w-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500">Upload Date</p>
-                    <p className="font-medium text-gray-900">{formatDate(notice.uploadDate)}</p>
+                    <p className="text-sm text-gray-500">Upload Date & Time</p>
+                    <p className="font-medium text-gray-900">{formatDateTime(notice.uploadDate)}</p>
                   </div>
                 </div>
 
