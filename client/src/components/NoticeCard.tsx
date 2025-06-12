@@ -178,14 +178,14 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
 
       {/* View Modal */}
       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className="max-w-5xl w-full h-[85vh] flex flex-col">
-          <DialogHeader className="border-b pb-4">
+        <DialogContent className="max-w-5xl w-[95vw] max-h-[90vh] h-auto sm:h-[85vh] flex flex-col p-0 gap-0">
+          <DialogHeader className="border-b pb-4 px-6 pt-6">
             <DialogTitle className="text-xl font-semibold">Notice Details</DialogTitle>
           </DialogHeader>
           
-          <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6">
+          <div className="flex-1 flex flex-col lg:flex-row gap-4 sm:gap-6 p-4 sm:p-6 overflow-hidden">
             {/* Document Preview */}
-            <div className="flex-1 bg-gray-50 rounded-lg overflow-hidden">
+            <div className="flex-1 bg-gray-50 rounded-lg overflow-hidden min-h-[300px] sm:min-h-[400px]">
               {notice.fileType.includes('pdf') ? (
                 <iframe 
                   src={`/${notice.filePath}`}
@@ -216,7 +216,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
             </div>
 
             {/* Notice Information */}
-            <div className="lg:w-80 bg-white rounded-lg border p-6 space-y-4">
+            <div className="w-full lg:w-80 bg-white rounded-lg border p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[400px] lg:max-h-none">
               <div>
                 <h3 className="font-semibold text-gray-900 text-lg mb-3">{notice.title}</h3>
               </div>
@@ -252,7 +252,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                   <FileText className="h-5 w-5 text-gray-400 mt-0.5" />
                   <div>
                     <p className="text-sm text-gray-500">Document</p>
-                    <p className="font-medium text-gray-900">{notice.fileName}</p>
+                    <p className="font-medium text-gray-900 text-sm break-words">{notice.fileName}</p>
                   </div>
                 </div>
               </div>
@@ -263,7 +263,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  View Full Document
+                  <span className="text-sm">View Full Document</span>
                 </Button>
                 
                 <Button 
@@ -272,7 +272,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                   className="w-full py-2.5"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Download
+                  <span className="text-sm">Download</span>
                 </Button>
 
                 <Button 
@@ -281,7 +281,7 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                   className="w-full py-2.5 border-red-200 text-red-600 hover:bg-red-50"
                 >
                   <AlertTriangle className="h-4 w-4 mr-2" />
-                  File Objection
+                  <span className="text-sm">File Objection</span>
                 </Button>
               </div>
             </div>
