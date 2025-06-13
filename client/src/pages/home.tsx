@@ -82,8 +82,8 @@ export default function Home() {
           <div className="flex items-center justify-between h-16">
             {/* Left Side - Logo and Name */}
             <div className="flex items-center">
-              <div className="flex items-center">
-                <svg className="h-8 w-8 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <div className="flex items-center space-x-2">
+                <svg className="h-6 w-6 sm:h-8 sm:w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   {/* Scales of Justice */}
                   <g transform="translate(2, 1)">
                     {/* Central pillar */}
@@ -91,7 +91,7 @@ export default function Home() {
                     {/* Top ornament */}
                     <circle cx="10" cy="2" r="1" fill="#1e3a8a"/>
                     {/* Horizontal beam */}
-                    <line x1="4" y1="6" x2="16" y1="6" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
+                    <line x1="4" y1="6" x2="16" y2="6" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
                     {/* Left scale */}
                     <path d="M2 10 L6 8 L6 12 Z" fill="#1e3a8a" opacity="0.8"/>
                     <line x1="4" y1="6" x2="4" y2="8" stroke="#1e3a8a" strokeWidth="1"/>
@@ -107,9 +107,9 @@ export default function Home() {
                     <circle cx="14" cy="4" r="0.5" fill="#1e3a8a" opacity="0.6"/>
                   </g>
                 </svg>
-                <div className="flex flex-col">
-                  <h1 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">Jahir Soochna</h1>
-                  <p className="text-xs sm:text-xs text-gray-600 font-medium tracking-wide">LEGAL NOTICE PLATFORM</p>
+                <div className="flex flex-col min-w-0">
+                  <h1 className="text-sm sm:text-lg md:text-xl font-bold text-gray-900 leading-tight truncate">Jahir Soochna</h1>
+                  <p className="text-[10px] sm:text-xs text-gray-600 font-medium tracking-wide hidden xs:block sm:block">LEGAL NOTICE PLATFORM</p>
                 </div>
               </div>
             </div>
