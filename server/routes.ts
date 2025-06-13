@@ -120,6 +120,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Save file
       const fs = require('fs');
+      const path = require('path');
+      
+      // Ensure uploads directory exists
+      if (!fs.existsSync('uploads')) {
+        fs.mkdirSync('uploads', { recursive: true });
+      }
+      
       fs.writeFileSync(filePath, buffer);
 
       const noticeData = {
@@ -137,10 +144,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.status(201).json(notice);
     } catch (error) {
+      console.error("Error saving generated notice:", error);
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid data", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to save generated notice" });
+      res.status(500).json({ message: "Failed to save generated notice", error: error.message });
     }
   });
 
