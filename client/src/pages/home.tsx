@@ -28,6 +28,11 @@ export default function Home() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        // Check if the click was on the menu button itself
+        const menuButton = document.querySelector('[data-menu-button="true"]');
+        if (menuButton && menuButton.contains(event.target as Node)) {
+          return; // Don't close if clicking the menu button
+        }
         setIsMobileMenuOpen(false);
       }
     };
@@ -141,7 +146,11 @@ export default function Home() {
                 variant="ghost" 
                 size="sm" 
                 className="p-1.5 sm:p-2"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                data-menu-button="true"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMobileMenuOpen(!isMobileMenuOpen);
+                }}
               >
                 {isMobileMenuOpen ? <X className="h-4 w-4 sm:h-5 sm:w-5 text-slate" /> : <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-slate" />}
               </Button>
@@ -153,7 +162,8 @@ export default function Home() {
         {isMobileMenuOpen && (
           <div 
             ref={menuRef}
-            className="absolute top-16 right-4 w-64 bg-white shadow-xl border border-gray-200 rounded-lg z-50 animate-in slide-in-from-top-2 duration-200"
+            className="absolute top-14 sm:top-16 right-2 sm:right-4 w-64 bg-white shadow-xl border border-gray-200 rounded-lg z-50 animate-in slide-in-from-top-2 duration-200"
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="p-4">
               <h3 className="font-semibold text-gray-900 mb-3 text-center">Categories</h3>
