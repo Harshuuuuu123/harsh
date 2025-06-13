@@ -160,9 +160,9 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl w-[95vw] max-h-[95vh] overflow-y-auto p-3 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
+          <DialogTitle className="flex items-center justify-between text-base sm:text-lg">
             Generate Notice Template
             <Button variant="ghost" size="sm" onClick={handleClose}>
               <X className="h-4 w-4" />
@@ -170,46 +170,48 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-6">
           {/* Form Section */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Notice Text (Hindi/English) *
               </label>
               <Textarea
                 value={noticeData.noticeText}
                 onChange={(e) => handleInputChange('noticeText', e.target.value)}
                 placeholder="Enter your legal notice text here..."
-                rows={8}
-                className="w-full"
+                rows={6}
+                className="w-full text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Lawyer's Name *
               </label>
               <Input
                 value={noticeData.lawyerName}
                 onChange={(e) => handleInputChange('lawyerName', e.target.value)}
                 placeholder="Enter lawyer's name"
+                className="text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Designation
               </label>
               <Input
                 value={noticeData.designation}
                 onChange={(e) => handleInputChange('designation', e.target.value)}
                 placeholder="एडवोकेट / Advocate"
+                className="text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Office Address *
               </label>
               <Textarea
@@ -217,28 +219,30 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                 onChange={(e) => handleInputChange('address', e.target.value)}
                 placeholder="Enter office address"
                 rows={3}
+                className="text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Contact Number *
               </label>
               <Input
                 value={noticeData.contactNumber}
                 onChange={(e) => handleInputChange('contactNumber', e.target.value)}
                 placeholder="Phone number"
+                className="text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                 Category *
               </label>
               <select
                 value={noticeData.category}
                 onChange={(e) => handleInputChange('category', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Select category</option>
@@ -253,34 +257,36 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
               </select>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3 pt-2">
               <Button
                 onClick={generateImage}
                 disabled={isGenerating}
-                className="w-full bg-navy hover:bg-navy text-white"
+                className="w-full bg-navy hover:bg-navy text-white text-sm py-2"
               >
                 <Eye className="h-4 w-4 mr-2" />
                 {isGenerating ? "Generating..." : "Generate Preview"}
               </Button>
               
               {previewImage && (
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Button
                     onClick={downloadImage}
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 text-sm py-2"
                   >
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
+                    <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Download</span>
+                    <span className="sm:hidden">Download</span>
                   </Button>
                   
                   <Button
                     onClick={saveToPlat}
                     disabled={saveMutation.isPending}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm py-2"
                   >
-                    <Save className="h-4 w-4 mr-2" />
-                    {saveMutation.isPending ? "Saving..." : "Save to Platform"}
+                    <Save className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">{saveMutation.isPending ? "Saving..." : "Save to Platform"}</span>
+                    <span className="sm:hidden">{saveMutation.isPending ? "Saving..." : "Save"}</span>
                   </Button>
                 </div>
               )}
@@ -288,8 +294,8 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
           </div>
 
           {/* Template Preview Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Preview</h3>
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold">Preview</h3>
             
             {/* Hidden template for image generation */}
             <div
@@ -363,16 +369,18 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
             {/* Visible preview */}
             {!isGenerating && (
               <div className="border border-gray-300 rounded-lg overflow-hidden">
-                <div
-                  className="bg-white border-2 border-black p-3 transform scale-50 origin-top-left lg:scale-75 xl:scale-90"
-                  style={{ 
-                    width: '800px', 
-                    minHeight: '600px',
-                    fontFamily: '"Noto Serif Devanagari", "Noto Sans Devanagari", serif',
-                    wordWrap: 'break-word',
-                    overflowWrap: 'break-word'
-                  }}
-                >
+                <div className="overflow-auto max-h-[400px] sm:max-h-[500px] lg:max-h-[600px]">
+                  <div
+                    className="bg-white border-2 border-black p-2 sm:p-3 transform origin-top-left"
+                    style={{ 
+                      width: '800px', 
+                      minHeight: '600px',
+                      fontFamily: '"Noto Serif Devanagari", "Noto Sans Devanagari", serif',
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
+                      scale: window.innerWidth < 640 ? '0.35' : window.innerWidth < 1024 ? '0.5' : window.innerWidth < 1280 ? '0.65' : '0.8'
+                    }}
+                  >
                   {/* Header */}
                   <div className="text-center mb-6">
                     <div className="bg-black text-white px-6 py-3 inline-block text-2xl font-bold">
@@ -431,13 +439,15 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
 
             {/* Generated Image Preview */}
             {previewImage && (
-              <div className="mt-4">
-                <h4 className="text-md font-semibold mb-2">Generated Image:</h4>
-                <img 
-                  src={previewImage} 
-                  alt="Generated Notice" 
-                  className="border border-gray-300 rounded-lg max-w-full"
-                />
+              <div className="mt-3 sm:mt-4">
+                <h4 className="text-sm sm:text-md font-semibold mb-2">Generated Image:</h4>
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <img 
+                    src={previewImage} 
+                    alt="Generated Notice" 
+                    className="w-full h-auto object-contain max-h-[300px] sm:max-h-[400px]"
+                  />
+                </div>
               </div>
             )}
           </div>
