@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { insertNoticeSchema, insertObjectionSchema } from "@shared/schema";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { z } from "zod";
 
 // Configure multer for file uploads
@@ -119,9 +120,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const filePath = `uploads/${fileName}`;
       
       // Save file
-      const fs = require('fs');
-      const path = require('path');
-      
       // Ensure uploads directory exists
       if (!fs.existsSync('uploads')) {
         fs.mkdirSync('uploads', { recursive: true });
