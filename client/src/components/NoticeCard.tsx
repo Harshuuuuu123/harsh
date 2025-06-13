@@ -140,6 +140,10 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                 src={`/${notice.filePath}`}
                 alt="Jahir Soochna Notice" 
                 className="w-full h-full object-cover rounded-lg shadow-sm"
+                onError={(e) => {
+                  console.log('Image load error for:', notice.filePath);
+                  e.currentTarget.src = '/uploads/sample_document.svg';
+                }}
               />
             ) : (
               <div className="text-center text-gray-500 p-4">
@@ -210,6 +214,10 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                   src={`/${notice.filePath}`}
                   alt="Notice Document"
                   className="w-full h-full object-contain"
+                  onError={(e) => {
+                    console.log('Modal image load error for:', notice.filePath);
+                    e.currentTarget.src = '/uploads/sample_document.svg';
+                  }}
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
