@@ -157,7 +157,7 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             Generate Notice Template
@@ -167,7 +167,7 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           {/* Form Section */}
           <div className="space-y-4">
             <div>
@@ -276,7 +276,9 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                 fontFamily: '"Noto Serif Devanagari", "Noto Sans Devanagari", serif',
                 position: isGenerating ? 'absolute' : 'relative',
                 left: isGenerating ? '-9999px' : 'auto',
-                top: isGenerating ? '-9999px' : 'auto'
+                top: isGenerating ? '-9999px' : 'auto',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
               }}
             >
               {/* Header */}
@@ -287,23 +289,46 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
               </div>
 
               {/* Body Text */}
-              <div className="text-justify leading-relaxed text-lg mb-8 px-4">
+              <div 
+                className="text-justify leading-relaxed text-lg mb-8 px-4"
+                style={{
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word',
+                  hyphens: 'auto',
+                  whiteSpace: 'pre-wrap',
+                  maxWidth: '100%'
+                }}
+              >
                 {noticeData.noticeText || "Your notice text will appear here..."}
               </div>
 
               {/* Footer */}
               <div className="bg-black text-white p-4 text-center">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div className="text-left">
-                    <div className="font-bold text-lg">
+                    <div 
+                      className="font-bold text-lg"
+                      style={{
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word'
+                      }}
+                    >
                       {noticeData.lawyerName || "Lawyer Name"}
                     </div>
                     {noticeData.designation && (
                       <div className="text-sm">({noticeData.designation})</div>
                     )}
                   </div>
-                  <div className="text-right text-sm">
-                    <div>{noticeData.address || "Office Address"}</div>
+                  <div className="text-right sm:text-right text-sm">
+                    <div 
+                      style={{
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word',
+                        maxWidth: '250px'
+                      }}
+                    >
+                      {noticeData.address || "Office Address"}
+                    </div>
                     <div>मो. नं. {noticeData.contactNumber || "Contact Number"}</div>
                   </div>
                 </div>
@@ -314,11 +339,13 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
             {!isGenerating && (
               <div className="border border-gray-300 rounded-lg overflow-hidden">
                 <div
-                  className="bg-white border-2 border-black p-3 transform scale-50 origin-top-left"
+                  className="bg-white border-2 border-black p-3 transform scale-50 origin-top-left lg:scale-75 xl:scale-90"
                   style={{ 
                     width: '800px', 
                     minHeight: '600px',
-                    fontFamily: '"Noto Serif Devanagari", "Noto Sans Devanagari", serif'
+                    fontFamily: '"Noto Serif Devanagari", "Noto Sans Devanagari", serif',
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word'
                   }}
                 >
                   {/* Header */}
@@ -329,23 +356,46 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                   </div>
 
                   {/* Body Text */}
-                  <div className="text-justify leading-relaxed text-lg mb-8 px-4">
+                  <div 
+                    className="text-justify leading-relaxed text-lg mb-8 px-4"
+                    style={{
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
+                      hyphens: 'auto',
+                      whiteSpace: 'pre-wrap',
+                      maxWidth: '100%'
+                    }}
+                  >
                     {noticeData.noticeText || "Your notice text will appear here..."}
                   </div>
 
                   {/* Footer */}
                   <div className="bg-black text-white p-4 text-center">
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                       <div className="text-left">
-                        <div className="font-bold text-lg">
+                        <div 
+                          className="font-bold text-lg"
+                          style={{
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word'
+                          }}
+                        >
                           {noticeData.lawyerName || "Lawyer Name"}
                         </div>
                         {noticeData.designation && (
                           <div className="text-sm">({noticeData.designation})</div>
                         )}
                       </div>
-                      <div className="text-right text-sm">
-                        <div>{noticeData.address || "Office Address"}</div>
+                      <div className="text-right sm:text-right text-sm">
+                        <div 
+                          style={{
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word',
+                            maxWidth: '250px'
+                          }}
+                        >
+                          {noticeData.address || "Office Address"}
+                        </div>
                         <div>मो. नं. {noticeData.contactNumber || "Contact Number"}</div>
                       </div>
                     </div>
