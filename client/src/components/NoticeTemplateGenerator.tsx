@@ -381,55 +381,56 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                       scale: window.innerWidth < 640 ? '0.35' : window.innerWidth < 1024 ? '0.5' : window.innerWidth < 1280 ? '0.65' : '0.8'
                     }}
                   >
-                  {/* Header */}
-                  <div className="text-center mb-6">
-                    <div className="bg-black text-white px-6 py-3 inline-block text-2xl font-bold">
-                      जाहिर सूचना
-                    </div>
-                  </div>
-
-                  {/* Body Text */}
-                  <div 
-                    className="text-justify leading-relaxed text-lg mb-8 px-4"
-                    style={{
-                      wordWrap: 'break-word',
-                      overflowWrap: 'break-word',
-                      hyphens: 'auto',
-                      whiteSpace: 'pre-wrap',
-                      maxWidth: '100%'
-                    }}
-                  >
-                    {noticeData.noticeText || "Your notice text will appear here..."}
-                  </div>
-
-                  {/* Footer */}
-                  <div className="bg-black text-white p-4 text-center">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                      <div className="text-left">
-                        <div 
-                          className="font-bold text-lg"
-                          style={{
-                            wordWrap: 'break-word',
-                            overflowWrap: 'break-word'
-                          }}
-                        >
-                          {noticeData.lawyerName || "Lawyer Name"}
-                        </div>
-                        {noticeData.designation && (
-                          <div className="text-sm">({noticeData.designation})</div>
-                        )}
+                    {/* Header */}
+                    <div className="text-center mb-6">
+                      <div className="bg-black text-white px-6 py-3 inline-block text-2xl font-bold">
+                        जाहिर सूचना
                       </div>
-                      <div className="text-right sm:text-right text-sm">
-                        <div 
-                          style={{
-                            wordWrap: 'break-word',
-                            overflowWrap: 'break-word',
-                            maxWidth: '250px'
-                          }}
-                        >
-                          {noticeData.address || "Office Address"}
+                    </div>
+
+                    {/* Body Text */}
+                    <div 
+                      className="text-justify leading-relaxed text-lg mb-8 px-4"
+                      style={{
+                        wordWrap: 'break-word',
+                        overflowWrap: 'break-word',
+                        hyphens: 'auto',
+                        whiteSpace: 'pre-wrap',
+                        maxWidth: '100%'
+                      }}
+                    >
+                      {noticeData.noticeText || "Your notice text will appear here..."}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="bg-black text-white p-4 text-center">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div className="text-left">
+                          <div 
+                            className="font-bold text-lg"
+                            style={{
+                              wordWrap: 'break-word',
+                              overflowWrap: 'break-word'
+                            }}
+                          >
+                            {noticeData.lawyerName || "Lawyer Name"}
+                          </div>
+                          {noticeData.designation && (
+                            <div className="text-sm">({noticeData.designation})</div>
+                          )}
                         </div>
-                        <div>मो. नं. {noticeData.contactNumber || "Contact Number"}</div>
+                        <div className="text-right sm:text-right text-sm">
+                          <div 
+                            style={{
+                              wordWrap: 'break-word',
+                              overflowWrap: 'break-word',
+                              maxWidth: '250px'
+                            }}
+                          >
+                            {noticeData.address || "Office Address"}
+                          </div>
+                          <div>मो. नं. {noticeData.contactNumber || "Contact Number"}</div>
+                        </div>
                       </div>
                     </div>
                   </div>
