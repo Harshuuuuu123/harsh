@@ -219,9 +219,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Serve uploaded files
   app.use('/uploads', express.static('uploads'));
-  
-  // Additional static file serving for better compatibility
-  app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
   // Download file endpoint
   app.get("/api/notices/:id/download", async (req, res) => {

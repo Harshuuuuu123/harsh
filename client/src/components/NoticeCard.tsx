@@ -134,22 +134,17 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
     <>
       <Card className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
         <div className="flex flex-col sm:flex-row">
-          <div className="sm:w-64 h-48 sm:h-auto bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+          <div className="sm:w-64 h-48 sm:h-auto bg-gray-50 flex items-center justify-center">
             {notice.fileType.includes('image') ? (
               <img 
                 src={`/${notice.filePath}`}
-                alt="Jahir Soochna Notice" 
-                className="w-full h-full object-cover rounded-lg shadow-sm"
-                onError={(e) => {
-                  console.log('Image load error for:', notice.filePath);
-                  e.currentTarget.src = '/uploads/sample_document.svg';
-                }}
+                alt="Notice preview" 
+                className="w-full h-full object-contain"
               />
             ) : (
               <div className="text-center text-gray-500 p-4">
                 {getFileIcon()}
                 <p className="text-sm mt-2 font-medium">{notice.fileType.includes('pdf') ? 'PDF Document' : 'Document'}</p>
-                <p className="text-xs text-blue-600 mt-1">Jahir Soochna</p>
               </div>
             )}
           </div>
@@ -214,10 +209,6 @@ function NoticeCardComponent({ notice }: NoticeCardProps) {
                   src={`/${notice.filePath}`}
                   alt="Notice Document"
                   className="w-full h-full object-contain"
-                  onError={(e) => {
-                    console.log('Modal image load error for:', notice.filePath);
-                    e.currentTarget.src = '/uploads/sample_document.svg';
-                  }}
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
