@@ -20,6 +20,7 @@ interface NoticeData {
   designation: string;
   address: string;
   contactNumber: string;
+  category: string;
 }
 
 export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGeneratorProps) {
@@ -28,7 +29,8 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
     lawyerName: "",
     designation: "",
     address: "",
-    contactNumber: ""
+    contactNumber: "",
+    category: ""
   });
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -123,10 +125,10 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
   };
 
   const saveToPlat = async () => {
-    if (!previewImage || !noticeData.lawyerName.trim()) {
+    if (!previewImage || !noticeData.lawyerName.trim() || !noticeData.category) {
       toast({
         title: "Missing Information",
-        description: "Please generate an image and provide lawyer name.",
+        description: "Please generate an image, provide lawyer name, and select a category.",
         variant: "destructive",
       });
       return;
@@ -139,7 +141,7 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
       title,
       lawyerName: noticeData.lawyerName,
       location: noticeData.address,
-      category: 'public'
+      category: noticeData.category
     });
   };
 
@@ -149,7 +151,8 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
       lawyerName: "",
       designation: "",
       address: "",
-      contactNumber: ""
+      contactNumber: "",
+      category: ""
     });
     setPreviewImage(null);
     onClose();
@@ -226,6 +229,28 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                 onChange={(e) => handleInputChange('contactNumber', e.target.value)}
                 placeholder="Phone number"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Category *
+              </label>
+              <select
+                value={noticeData.category}
+                onChange={(e) => handleInputChange('category', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="">Select category</option>
+                <option value="home">Home</option>
+                <option value="land">Land</option>
+                <option value="namechange">Name Change</option>
+                <option value="property">Property Dispute</option>
+                <option value="legal">Legal</option>
+                <option value="public">Public Notice</option>
+                <option value="court">Court Notice</option>
+                <option value="tender">Tender</option>
+              </select>
             </div>
 
             <div className="space-y-3">
