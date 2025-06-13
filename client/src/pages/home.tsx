@@ -78,12 +78,12 @@ export default function Home() {
     <div className="min-h-screen bg-light-grey">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Left Side - Logo and Name */}
-            <div className="flex items-center">
-              <div className="flex items-center space-x-2">
-                <svg className="h-6 w-6 sm:h-8 sm:w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="flex items-center flex-1 min-w-0">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
+                <svg className="h-5 w-5 sm:h-7 sm:w-7 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   {/* Scales of Justice */}
                   <g transform="translate(2, 1)">
                     {/* Central pillar */}
@@ -107,41 +107,43 @@ export default function Home() {
                     <circle cx="14" cy="4" r="0.5" fill="#1e3a8a" opacity="0.6"/>
                   </g>
                 </svg>
-                <div className="flex flex-col min-w-0">
-                  <h1 className="text-sm sm:text-lg md:text-xl font-bold text-gray-900 leading-tight truncate">Jahir Soochna</h1>
-                  <p className="text-[10px] sm:text-xs text-gray-600 font-medium tracking-wide hidden xs:block sm:block">LEGAL NOTICE PLATFORM</p>
+                <div className="flex flex-col min-w-0 flex-1">
+                  <h1 className="text-xs sm:text-base md:text-lg font-bold text-gray-900 leading-tight truncate max-w-[120px] sm:max-w-none">Jahir Soochna</h1>
+                  <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-600 font-medium tracking-wide hidden sm:block truncate">LEGAL NOTICE PLATFORM</p>
                 </div>
               </div>
             </div>
 
             {/* Right Side - Upload Button and Menu */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
               <Button 
                 onClick={() => setIsTemplateGeneratorOpen(true)}
                 variant="outline"
-                className="px-3 py-2 border-navy text-navy hover:bg-navy hover:text-white transition-colors"
+                size="sm"
+                className="px-2 sm:px-3 py-1.5 sm:py-2 border-navy text-navy hover:bg-navy hover:text-white transition-colors text-xs sm:text-sm"
               >
-                <FileImage className="h-4 w-4 mr-1" />
-                <span className="hidden md:inline">Generate Notice</span>
-                <span className="md:hidden">Generate</span>
+                <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
+                <span className="hidden lg:inline">Generate Notice</span>
+                <span className="lg:hidden">Generate</span>
               </Button>
               
               <Button 
                 onClick={() => setIsUploadModalOpen(true)}
-                className="bg-navy hover:bg-navy text-white px-4 py-2 rounded-lg transition-colors"
+                size="sm"
+                className="bg-navy hover:bg-navy text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm"
               >
-                <Plus className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Upload Notice</span>
-                <span className="sm:hidden">Upload</span>
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
+                <span className="hidden md:inline">Upload Notice</span>
+                <span className="md:hidden">Upload</span>
               </Button>
               
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="p-2"
+                className="p-1.5 sm:p-2"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <X className="h-5 w-5 text-slate" /> : <Menu className="h-5 w-5 text-slate" />}
+                {isMobileMenuOpen ? <X className="h-4 w-4 sm:h-5 sm:w-5 text-slate" /> : <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-slate" />}
               </Button>
             </div>
           </div>
