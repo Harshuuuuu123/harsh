@@ -108,8 +108,8 @@ export default function Home() {
                   </g>
                 </svg>
                 <div className="flex flex-col">
-                  <h1 className="text-xl font-bold text-gray-900 leading-tight">Jahir Soochna</h1>
-                  <p className="text-xs text-gray-600 font-medium tracking-wide">LEGAL NOTICE PLATFORM</p>
+                  <h1 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">Jahir Soochna</h1>
+                  <p className="text-xs sm:text-xs text-gray-600 font-medium tracking-wide">LEGAL NOTICE PLATFORM</p>
                 </div>
               </div>
             </div>
