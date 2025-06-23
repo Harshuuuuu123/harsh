@@ -1,8 +1,12 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { Notice } from "@shared/schema";
+import { Notice } from "@shared/db/schema";
+
+export interface NoticeWithObjection extends Notice {
+  objectionCount: number;
+}
 
 interface NoticesResponse {
-  notices: Notice[];
+  notices: NoticeWithObjection[];
   total: number;
   page: number;
   limit: number;
@@ -16,15 +20,22 @@ interface UseNoticesOptions {
   sortBy?: string;
 }
 
-export function useNotices({ search, category, dateFilter, sortBy }: UseNoticesOptions = {}) {
-  const noticesQuery = useInfiniteQuery({
+export function useNotices({
+  search,
+  category,
+  dateFilter,
+  sortBy,
+}: UseNoticesOptions = {}) {
+  const noticesQuery = useInfiniteQuery<NoticesResponse, Error>({
     queryKey: ["/api/notices", { search, category, dateFilter, sortBy }],
-    queryFn: async ({ pageParam = 1 }) => {
+    queryFn: async ({ pageParam }): Promise<NoticesResponse> => {
+      const currentPage = (pageParam as number) || 1;
+
       const params = new URLSearchParams({
-        page: pageParam.toString(),
+        page: currentPage.toString(),
         limit: "15",
       });
-      
+
       if (search) params.append("search", search);
       if (category && category !== "all") params.append("category", category);
       if (dateFilter && dateFilter !== "all") params.append("dateFilter", dateFilter);
@@ -33,19 +44,17 @@ export function useNotices({ search, category, dateFilter, sortBy }: UseNoticesO
       const response = await fetch(`/api/notices?${params}`, {
         credentials: "include",
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch notices");
       }
-      
-      return response.json() as Promise<NoticesResponse>;
+
+      return await response.json();
     },
-    getNextPageParam: (lastPage) => {
-      return lastPage.hasMore ? lastPage.page + 1 : undefined;
-    },
+    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.page + 1 : undefined,
     initialPageParam: 1,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const categoryCountsQuery = useQuery({
@@ -54,15 +63,15 @@ export function useNotices({ search, category, dateFilter, sortBy }: UseNoticesO
       const response = await fetch("/api/notices/categories", {
         credentials: "include",
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to fetch category counts");
       }
-      
-      return response.json() as Promise<Record<string, number>>;
+
+      return (await response.json()) as Record<string, number>;
     },
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 
   return {

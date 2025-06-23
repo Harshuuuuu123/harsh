@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -40,20 +39,22 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
 
   const saveMutation = useMutation({
     mutationFn: async (data: { imageData: string; title: string; lawyerName: string; location: string; category: string }) => {
+      const token = localStorage.getItem("token");
+
       const response = await fetch("/api/notices/generated", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
-        credentials: "include",
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || "Save failed");
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
@@ -134,8 +135,8 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
       return;
     }
 
-    const title = `जाहिर सूचना - ${noticeData.lawyerName}`;
-    
+    const title = `जाहिर सूचना /- ${noticeData.lawyerName}`;
+
     saveMutation.mutate({
       imageData: previewImage,
       title,
@@ -169,6 +170,9 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
             </Button>
           </DialogTitle>
         </DialogHeader>
+
+       
+
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-6">
           {/* Form Section */}
@@ -313,12 +317,13 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
               }}
             >
               {/* Header */}
-              <div className="text-center mb-6">
-                <div className="bg-black text-white px-6 py-3 inline-block text-2xl font-bold">
-                  जाहिर सूचना
-                </div>
-              </div>
-
+             <div className="text-center mb-6">
+  <img 
+    src="/tag.png" 
+    alt="Notice Header" 
+    className="mx-auto h-24 object-contain"
+  />
+</div>
               {/* Body Text */}
               <div 
                 className="text-justify leading-relaxed text-lg mb-8 px-4"
@@ -383,10 +388,12 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                   >
                     {/* Header */}
                     <div className="text-center mb-6">
-                      <div className="bg-black text-white px-6 py-3 inline-block text-2xl font-bold">
-                        जाहिर सूचना
-                      </div>
-                    </div>
+  <img 
+    src="/tag.png" 
+    alt="Notice Header" 
+    className="mx-auto h-24 object-contain"
+  />
+</div>
 
                     {/* Body Text */}
                     <div 

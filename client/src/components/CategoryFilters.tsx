@@ -21,7 +21,8 @@ const categories = [
 export function CategoryFilters({ activeCategory, onCategoryChange, categoryCounts }: CategoryFiltersProps) {
   return (
     <div className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+
         <div className="flex flex-wrap gap-3">
           {categories.map((category) => {
             const isActive = activeCategory === category.key;

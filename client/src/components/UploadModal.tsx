@@ -27,17 +27,20 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
   const uploadMutation = useMutation({
     mutationFn: async (data: FormData) => {
+      const token = localStorage.getItem("token");
       const response = await fetch("/api/notices", {
         method: "POST",
         body: data,
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || "Upload failed");
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
@@ -67,7 +70,7 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!file) {
       toast({
         title: "File Required",
@@ -119,7 +122,14 @@ export function UploadModal({ isOpen, onClose }: UploadModalProps) {
   };
 
   const validateFile = (file: File): boolean => {
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/jpg', 'image/png'];
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/jpg',
+      'image/png'
+    ];
     const maxSize = 10 * 1024 * 1024; // 10MB
 
     if (!allowedTypes.includes(file.type)) {

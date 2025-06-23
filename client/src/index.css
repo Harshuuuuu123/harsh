@@ -111,3 +111,8 @@
     background-color: var(--danger-hover);
   }
 }
+img.h-14.w-30.m-2 {
+    margin: auto;
+        padding: 6px;
+            border-radius: 10px;
+}

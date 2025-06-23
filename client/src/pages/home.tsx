@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, SetStateAction } from "react";
 import { useNotices } from "@/hooks/use-notices";
 import { useDebounce } from "@/hooks/use-debounce";
 import { SearchBar } from "@/components/SearchBar";
@@ -9,7 +9,13 @@ import { UploadModal } from "@/components/UploadModal";
 import { NoticeTemplateGenerator } from "@/components/NoticeTemplateGenerator";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
 import { Button } from "@/components/ui/button";
-import { Plus, Menu, X, FileImage } from "lucide-react";
+import { Plus, Menu, X, FileImage, UserCircle, LogOut } from "lucide-react";
+import img1 from "../../../attached_assets/jahirimg.jpg";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Notice } from "@shared/db/schema";
+
+type NoticeWithObjection = Notice & { objectionCount: number };
 
 export default function Home() {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -19,32 +25,71 @@ export default function Home() {
   const [dateFilter, setDateFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
 
-  // Debounce search query to reduce API calls
+  const userRole = localStorage.getItem("userRole");
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const profileRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      if (!axios.defaults.headers.common["Authorization"]) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      }
+      const email = localStorage.getItem("userEmail") || "";
+      setUserEmail(email);
+    }
+  }, []);
+
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        // Check if the click was on the menu button itself
-        const menuButton = document.querySelector('[data-menu-button="true"]');
-        if (menuButton && menuButton.contains(event.target as Node)) {
-          return; // Don't close if clicking the menu button
-        }
+      const target = event.target as Node;
+      const menuButton = document.querySelector('[data-menu-button="true"]') as Element | null;
+      if (menuRef.current && !menuRef.current.contains(target) && (!menuButton || !menuButton.contains(target))) {
         setIsMobileMenuOpen(false);
       }
     };
 
     if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (profileRef.current && !profileRef.current.contains(target)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/auth/logout");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userRole");
+      delete axios.defaults.headers.common["Authorization"];
+      navigate("/login");
+    }
+  };
 
   const {
     notices,
@@ -52,15 +97,15 @@ export default function Home() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    categoryCounts
-  } = useNotices({ 
-    search: debouncedSearchQuery, 
+    categoryCounts,
+  } = useNotices({
+    search: debouncedSearchQuery,
     category: activeCategory,
     dateFilter,
-    sortBy
+    sortBy,
   });
 
-  const allNotices = notices?.pages?.flatMap(page => page.notices) || [];
+  const allNotices: NoticeWithObjection[] = notices?.pages?.flatMap((page) => page.notices) || [];
 
   const categoryOptions = [
     { value: "all", label: "All Categories" },
@@ -71,182 +116,135 @@ export default function Home() {
     { value: "legal", label: "Legal" },
     { value: "public", label: "Public Notice" },
     { value: "court", label: "Court Notice" },
-    { value: "tender", label: "Tender" }
+    { value: "tender", label: "Tender" },
   ];
 
-  const handleCategorySelect = (category: string) => {
+  const handleCategorySelect = (category: SetStateAction<string>) => {
     setActiveCategory(category);
     setIsMobileMenuOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-light-grey">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 relative">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+      {/* HEADER */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="w-full mx-auto px-2 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
-            {/* Left Side - Logo and Name */}
             <div className="flex items-center flex-1 min-w-0">
               <div className="flex items-center space-x-1.5 sm:space-x-2">
-                <svg className="h-5 w-5 sm:h-7 sm:w-7 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {/* Scales of Justice */}
-                  <g transform="translate(2, 1)">
-                    {/* Central pillar */}
-                    <line x1="10" y1="2" x2="10" y2="20" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
-                    {/* Top ornament */}
-                    <circle cx="10" cy="2" r="1" fill="#1e3a8a"/>
-                    {/* Horizontal beam */}
-                    <line x1="4" y1="6" x2="16" y2="6" stroke="#1e3a8a" strokeWidth="1.5" strokeLinecap="round"/>
-                    {/* Left scale */}
-                    <path d="M2 10 L6 8 L6 12 Z" fill="#1e3a8a" opacity="0.8"/>
-                    <line x1="4" y1="6" x2="4" y2="8" stroke="#1e3a8a" strokeWidth="1"/>
-                    <ellipse cx="4" cy="10" rx="2.5" ry="0.8" fill="none" stroke="#1e3a8a" strokeWidth="1"/>
-                    {/* Right scale */}
-                    <path d="M18 10 L14 8 L14 12 Z" fill="#1e3a8a" opacity="0.8"/>
-                    <line x1="16" y1="6" x2="16" y2="8" stroke="#1e3a8a" strokeWidth="1"/>
-                    <ellipse cx="16" cy="10" rx="2.5" ry="0.8" fill="none" stroke="#1e3a8a" strokeWidth="1"/>
-                    {/* Base */}
-                    <rect x="7" y="18" width="6" height="2" rx="1" fill="#1e3a8a"/>
-                    {/* Decorative elements */}
-                    <circle cx="6" cy="4" r="0.5" fill="#1e3a8a" opacity="0.6"/>
-                    <circle cx="14" cy="4" r="0.5" fill="#1e3a8a" opacity="0.6"/>
-                  </g>
-                </svg>
-                <div className="flex flex-col min-w-0 flex-1">
-                  <h1 className="text-xs sm:text-base md:text-lg font-bold text-gray-900 leading-tight truncate max-w-[120px] sm:max-w-none">Jahir Soochna</h1>
-                  <p className="text-[8px] sm:text-[10px] md:text-xs text-gray-600 font-medium tracking-wide hidden sm:block truncate">LEGAL NOTICE PLATFORM</p>
-                </div>
+                <img src={img1} alt="jahir-img" className="h-14 w-30 m-2" />
               </div>
             </div>
 
-            {/* Right Side - Upload Button and Menu */}
-            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-              <Button 
-                onClick={() => setIsTemplateGeneratorOpen(true)}
-                variant="outline"
-                size="sm"
-                className="px-2 sm:px-3 py-1.5 sm:py-2 border-navy text-navy hover:bg-navy hover:text-white transition-colors text-xs sm:text-sm"
-              >
-                <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
-                <span className="hidden lg:inline">Generate Notice</span>
-                <span className="lg:hidden">Generate</span>
-              </Button>
-              
-              <Button 
-                onClick={() => setIsUploadModalOpen(true)}
-                size="sm"
-                className="bg-navy hover:bg-navy text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm"
-              >
-                <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
-                <span className="hidden md:inline">Upload Notice</span>
-                <span className="md:hidden">Upload</span>
-              </Button>
-              
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="p-1.5 sm:p-2"
-                data-menu-button="true"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsMobileMenuOpen(!isMobileMenuOpen);
-                }}
-              >
+            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0 relative">
+              {userEmail && (
+                <span className="hidden sm:inline text-sm text-gray-600 mr-2">
+                  Logged in as: <strong>{userEmail}</strong>
+                </span>
+              )}
+
+              {userRole === "lawyer" && (
+                <>
+                  <Button onClick={() => setIsTemplateGeneratorOpen(true)} variant="outline" size="sm" className="px-2 sm:px-3 py-1.5 sm:py-2 border-navy text-navy hover:bg-navy hover:text-white transition-colors text-xs sm:text-sm">
+                    <FileImage className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
+                    <span className="hidden lg:inline">Generate Notice</span>
+                    <span className="lg:hidden">Generate</span>
+                  </Button>
+
+                  <Button onClick={() => setIsUploadModalOpen(true)} size="sm" className="bg-navy hover:bg-navy text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg transition-colors text-xs sm:text-sm">
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
+                    <span className="hidden md:inline">Upload Notice</span>
+                    <span className="md:hidden">Upload</span>
+                  </Button>
+                </>
+              )}
+
+              <div className="relative" ref={profileRef}>
+                <Button variant="ghost" size="sm" className="p-1.5 sm:p-2" onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}>
+                  <UserCircle className="h-5 w-5 text-slate" />
+                </Button>
+
+                {isProfileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-in slide-in-from-top-2 duration-200">
+                    <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <LogOut className="inline-block mr-2 h-4 w-4" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <Button variant="ghost" size="sm" className="p-1.5 sm:p-2" data-menu-button="true" onClick={(e) => {
+                e.stopPropagation();
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}>
                 {isMobileMenuOpen ? <X className="h-4 w-4 sm:h-5 sm:w-5 text-slate" /> : <Menu className="h-4 w-4 sm:h-5 sm:w-5 text-slate" />}
               </Button>
+
+              {isMobileMenuOpen && (
+                <div className="absolute right-0 top-14 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50 animate-in slide-in-from-top-2 duration-200 max-h-96 overflow-y-auto">
+                  <div className="py-2">
+                    <p className="px-4 py-1 text-xs text-gray-400 uppercase">Categories</p>
+                    {categoryOptions.map((option) => (
+                      <button key={option.value} onClick={() => handleCategorySelect(option.value)} className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${activeCategory === option.value ? "bg-gray-100 font-semibold" : ""}`}>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-
-        {/* Dropdown Menu */}
-        {isMobileMenuOpen && (
-          <div 
-            ref={menuRef}
-            className="absolute top-14 sm:top-16 right-2 sm:right-4 w-64 bg-white shadow-xl border border-gray-200 rounded-lg z-50 animate-in slide-in-from-top-2 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-900 mb-3 text-center">Categories</h3>
-              <div className="space-y-1">
-                {categoryOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => handleCategorySelect(option.value)}
-                    className={`w-full text-left px-3 py-2 rounded-md transition-all duration-200 text-sm font-medium ${
-                      activeCategory === option.value
-                        ? "bg-navy text-white shadow-md"
-                        : "text-gray-700 hover:bg-gray-100 hover:shadow-sm"
-                    }`}
-                  >
-                    {option.label}
-                    {categoryCounts[option.value] && (
-                      <span className="ml-2 text-xs opacity-75 bg-gray-200 px-1.5 py-0.5 rounded-full">
-                        {categoryCounts[option.value]}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* Search Bar */}
-      <SearchBar 
-        value={searchQuery}
-        onChange={setSearchQuery}
-      />
+      {/* Search and Filter Row */}
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="w-full md:w-[48%]">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          </div>
+          <div className="w-full md:w-[48%]">
+            <FilterControls
+              dateFilter={dateFilter}
+              sortBy={sortBy}
+              onDateFilterChange={setDateFilter}
+              onSortByChange={setSortBy}
+            />
+          </div>
+        </div>
+      </div>
 
-      {/* Category Filters */}
       <CategoryFilters
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
         categoryCounts={categoryCounts}
       />
 
-      {/* Filter Controls */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FilterControls
-          dateFilter={dateFilter}
-          sortBy={sortBy}
-          onDateFilterChange={setDateFilter}
-          onSortByChange={setSortBy}
-        />
-      </div>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Notices Header */}
+      <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-dark-grey mb-2">
             {activeCategory === "all" ? "All Notices" : `${activeCategory} Notices`}
           </h2>
           <p className="text-slate">
-            {allNotices.length} {allNotices.length === 1 ? 'notice' : 'notices'} found
+            {allNotices.length} {allNotices.length === 1 ? "notice" : "notices"} found
           </p>
         </div>
 
-        {/* Notices List */}
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {allNotices.map((notice) => (
             <NoticeCard key={notice.id} notice={notice} />
           ))}
 
           {isLoading && allNotices.length === 0 && (
-            <div className="text-center py-8">
-              <div className="text-slate">Loading notices...</div>
-            </div>
+            <div className="col-span-full text-center py-8 text-slate">Loading notices...</div>
           )}
 
           {!isLoading && allNotices.length === 0 && (
-            <div className="text-center py-8">
-              <div className="text-slate">No notices found</div>
-            </div>
+            <div className="col-span-full text-center py-8 text-slate">No notices found</div>
           )}
         </div>
 
-        {/* Infinite Scroll */}
         <InfiniteScroll
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
@@ -254,17 +252,8 @@ export default function Home() {
         />
       </main>
 
-      {/* Upload Modal */}
-      <UploadModal
-        isOpen={isUploadModalOpen}
-        onClose={() => setIsUploadModalOpen(false)}
-      />
-
-      {/* Notice Template Generator */}
-      <NoticeTemplateGenerator
-        isOpen={isTemplateGeneratorOpen}
-        onClose={() => setIsTemplateGeneratorOpen(false)}
-      />
+      <UploadModal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} />
+      <NoticeTemplateGenerator isOpen={isTemplateGeneratorOpen} onClose={() => setIsTemplateGeneratorOpen(false)} />
     </div>
   );
 }
