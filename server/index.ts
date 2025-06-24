@@ -2,7 +2,6 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import "dotenv/config";
-import path from "path";
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
@@ -42,7 +41,6 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  // Global error handler
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -50,22 +48,14 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
   });
 
-  // In development, use Vite to serve the frontend (hot reload, etc.)
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    // In production, serve static files
-    app.use(express.static(path.join(__dirname, "public"))); // Serve static files from "public" folder
-
-    // Fallback for SPA routes, serve index.html for all unknown routes
-    app.get("*", (_req, res) => {
-      res.sendFile(path.join(__dirname, "public", "index.html"));
-    });
+    serveStatic(app);
   }
 
   const port = 5000;
 
-  // Start server
   server.listen(port, () => {
     log(`✅ Server running on http://localhost:${port}`);
   });
