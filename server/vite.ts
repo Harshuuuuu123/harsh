@@ -1,4 +1,3 @@
-
 import express, { type Express } from "express";
 import fs from "fs";
 import path from "path";
@@ -24,25 +23,18 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
+// 🧪 Dev setup for local development with Vite middleware
 export async function setupVite(app: Express, server: Server) {
-  const serverOptions = {
-  middlewareMode: true,
-  hmr: { server },
-  allowedHosts: true, // ✅ FIXED: "all" → true
-};
-
- const vite = await createViteServer({
-  ...viteConfig,
-  configFile: false,
-  server: {
-    middlewareMode: true,
-    hmr: {
-      server, // 👈 make sure this is the actual raw HTTP server
+  const vite = await createViteServer({
+    ...viteConfig,
+    configFile: false,
+    server: {
+      middlewareMode: true,
+      hmr: { server },
+      allowedHosts: true,
     },
-    allowedHosts: true, // ✅ fixed
-  },
-  appType: "custom",
-});
+    appType: "custom",
+  });
 
   app.use(vite.middlewares);
 
@@ -50,12 +42,7 @@ export async function setupVite(app: Express, server: Server) {
     const url = req.originalUrl;
 
     try {
-      const clientTemplate = path.resolve(
-        __dirname,
-        "..",
-        "client",
-        "index.html"
-      );
+      const clientTemplate = path.resolve(__dirname, "..", "client", "index.html");
 
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
@@ -72,18 +59,21 @@ export async function setupVite(app: Express, server: Server) {
   });
 }
 
+// 🧱 Production static serving from dist/public
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "public");
+  const distPublicPath = path.resolve(__dirname, "..", "dist", "public");
 
-  if (!fs.existsSync(distPath)) {
+  if (!fs.existsSync(distPublicPath)) {
     throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`
+      `❌ Could not find the build directory: ${distPublicPath}. Make sure to run 'npm run build' before deploying.`
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve JS, CSS, images, etc.
+  app.use(express.static(distPublicPath));
 
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  // Fallback for React Router (SPA)
+  app.get("*", (_req, res) => {
+    res.sendFile(path.resolve(distPublicPath, "index.html"));
   });
 }
