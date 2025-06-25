@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const API_URL = 'https://thejahirsuchna.in';
 
-console.log(`API URL: ${API_URL}`); // Debugging line to check API URL
+// console.log(`API URL: ${API_URL}`); // Debugging line to check API URL
 
 export default function LoginSignup() {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
