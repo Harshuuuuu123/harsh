@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://thejahirsuchna.in';
+const API_URL = 'https://thejahirsuchna.in';
 
 console.log(`API URL: ${API_URL}`); // Debugging line to check API URL
 
