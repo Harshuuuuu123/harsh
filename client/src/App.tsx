@@ -8,17 +8,17 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import LoginSignup from "./components/login";
+import LandingPage from "./pages/LandingPage"; 
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// Protected Route component
+// Protected Route wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
-  
   if (!token) {
     return <Navigate to="/login" replace />;
   }
-
   return <>{children}</>;
 }
 
@@ -26,20 +26,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set up axios defaults
     const token = localStorage.getItem('token');
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
 
-    // Verify token on app load
     const verifyToken = async () => {
       try {
         if (token) {
           await axios.get('/api/auth/me');
         }
       } catch (error) {
-        // If token is invalid, clear it
         localStorage.removeItem('token');
         localStorage.removeItem('userEmail');
         delete axios.defaults.headers.common['Authorization'];
@@ -51,9 +48,7 @@ function App() {
     verifyToken();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -62,15 +57,24 @@ function App() {
           <Toaster />
           <BrowserRouter>
             <Routes>
-              <Route path="/login" element={<LoginSignup />} />
+              {/* ✅ New landing page as entry point */}
+              <Route path="/" element={<LandingPage />} />
+
+              {/* ✅ Protected home page */}
               <Route 
-                path="/" 
+                path="/home" 
                 element={
                   <ProtectedRoute>
                     <Home />
                   </ProtectedRoute>
                 } 
               />
+
+              {/* Login and signup */}
+              <Route path="/login" element={<LoginSignup />} />
+              <Route path="/signup" element={<LoginSignup />} />
+
+              {/* Catch-all */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
