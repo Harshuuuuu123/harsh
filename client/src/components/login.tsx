@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import axios from 'axios';
 
 const API_URL = 'https://thejahirsuchna.in';
-
 export default function LoginSignup() {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
   const [loginEmail, setLoginEmail] = useState('');
