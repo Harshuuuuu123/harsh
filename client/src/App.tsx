@@ -13,6 +13,7 @@ import LandingPage from "./pages/LandingPage";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
 // Protected Route wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
