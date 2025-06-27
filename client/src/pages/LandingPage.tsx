@@ -62,7 +62,7 @@ export default function LandingPage() {
         <h2 className="text-2xl font-bold text-dark-grey mb-4">Today’s Notices</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {todayNotices.map((notice) => (
-            <NoticeCard key={notice.id} notice={notice} />
+            <NoticeCard key={notice.id} notice={notice} showMeta={false} />
           ))}
 
           {isLoading && todayNotices.length === 0 && (

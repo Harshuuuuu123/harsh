@@ -8,14 +8,14 @@ interface CategoryFiltersProps {
 
 const categories = [
   { key: "all", label: "All" },
-  { key: "home", label: "Home" },
-  { key: "land", label: "Land" },
+  { key: "home", label: " Residential Home" },
+  { key: "land", label: "Land Agriculture" },
   { key: "namechange", label: "Name Change" },
-  { key: "property", label: "Property Dispute" },
-  { key: "legal", label: "Legal" },
-  { key: "public", label: "Public Notice" },
-  { key: "court", label: "Court Notice" },
-  { key: "tender", label: "Tender" },
+  { key: "property", label: "Plot" },
+  { key: "legal", label: "Document Lost" },
+  { key: "public", label: "Objection inPublic Notice Counter" },
+  { key: "court", label: "Middle Name Change " },
+  { key: "tender", label: "Fraud" },
 ];
 
 export function CategoryFilters({ activeCategory, onCategoryChange, categoryCounts }: CategoryFiltersProps) {

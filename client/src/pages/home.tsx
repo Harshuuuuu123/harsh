@@ -109,14 +109,14 @@ export default function Home() {
 
   const categoryOptions = [
     { value: "all", label: "All Categories" },
-    { value: "home", label: "Home" },
-    { value: "land", label: "Land" },
+    { value: "home", label: "Residential Home" },
+    { value: "land", label: "Land Agriculture" },
     { value: "namechange", label: "Name Change" },
-    { value: "property", label: "Property Dispute" },
-    { value: "legal", label: "Legal" },
-    { value: "public", label: "Public Notice" },
-    { value: "court", label: "Court Notice" },
-    { value: "tender", label: "Tender" },
+    { value: "property", label: "Plot" },
+    { value: "legal", label: "Document Lost" },
+    { value: "public", label: "Objection inPublic Notice Counter" },
+    { value: "court", label: "Middle Name Change" },
+    { value: "tender", label: "Fraud" },
   ];
 
   const handleCategorySelect = (category: SetStateAction<string>) => {

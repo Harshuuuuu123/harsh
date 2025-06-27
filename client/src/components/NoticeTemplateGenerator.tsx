@@ -250,14 +250,14 @@ export function NoticeTemplateGenerator({ isOpen, onClose }: NoticeTemplateGener
                 required
               >
                 <option value="">Select category</option>
-                <option value="home">Home</option>
-                <option value="land">Land</option>
+                <option value="home">Residential Home</option>
+                <option value="land">Land Agriculture</option>
                 <option value="namechange">Name Change</option>
-                <option value="property">Property Dispute</option>
-                <option value="legal">Legal</option>
-                <option value="public">Public Notice</option>
-                <option value="court">Court Notice</option>
-                <option value="tender">Tender</option>
+                <option value="property">Plot</option>
+                <option value="legal">Document Lost</option>
+                <option value="public">Objection inPublic Notice Counter</option>
+                <option value="court">Middle Name Change</option>
+                <option value="tender">Fraud</option>
               </select>
             </div>
 
