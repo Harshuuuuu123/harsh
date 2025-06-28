@@ -1,40 +1,41 @@
-import { useEffect, useState } from "react";
-import { useDebounce } from "@/hooks/use-debounce";
-import { SearchBar } from "@/components/SearchBar";
-import { FilterControls } from "@/components/FilterControls";
-import { NoticeCard } from "@/components/NoticeCard";
-import { Button } from "@/components/ui/button";
-import { useNotices } from "@/hooks/use-notices";
-import { useNavigate } from "react-router-dom";
-import img1 from "../../../attached_assets/jahirimg.jpg";
+"use client"
+
+import { useState } from "react"
+import { useDebounce } from "@/hooks/use-debounce"
+import { SearchBar } from "@/components/SearchBar"
+import { FilterControls } from "@/components/FilterControls"
+import { NoticeCard } from "@/components/NoticeCard"
+import { Button } from "@/components/ui/button"
+import { useNotices } from "@/hooks/use-notices"
+import { useNavigate } from "react-router-dom"
+import img1 from "../../../attached_assets/jahirimg.jpg"
 
 export default function LandingPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [dateFilter, setDateFilter] = useState("today");
-  const [sortBy, setSortBy] = useState("newest");
-  const debouncedSearchQuery = useDebounce(searchQuery, 300);
-  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("")
+  const [dateFilter, setDateFilter] = useState("today")
+  const [sortBy, setSortBy] = useState("newest")
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
+  const navigate = useNavigate()
 
-  const {
-    notices,
-    isLoading,
-  } = useNotices({
+  const { notices, isLoading } = useNotices({
     search: debouncedSearchQuery,
     category: "all",
     dateFilter,
     sortBy,
-  });
+  })
 
-  const todayNotices = notices?.pages?.flatMap((page) => page.notices) || [];
+  const todayNotices = notices?.pages?.flatMap((page) => page.notices) || []
 
   return (
     <div className="min-h-screen bg-light-grey">
       {/* HEADER */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="w-full mx-auto px-4 py-2 flex items-center justify-between">
-          <img src={img1} alt="jahir-img" className="h-14 w-30" />
+          <img src={img1 || "/placeholder.svg"} alt="jahir-img" className="h-14 w-30" />
           <div className="flex gap-2">
-            <Button onClick={() => navigate("/login")} variant="outline">Login</Button>
+            <Button onClick={() => navigate("/login")} variant="outline">
+              Login
+            </Button>
             <Button onClick={() => navigate("/signup")}>Signup</Button>
           </div>
         </div>
@@ -59,10 +60,11 @@ export default function LandingPage() {
 
       {/* Notices */}
       <main className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h2 className="text-2xl font-bold text-dark-grey mb-4">Today’s Notices</h2>
+        <h2 className="text-2xl font-bold text-dark-grey mb-4">Today's Notices</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {todayNotices.map((notice) => (
-            <NoticeCard key={notice.id} notice={notice} showMeta={false} />
+            <NoticeCard key={notice.id} notice={notice} showFullDetails={false} />
           ))}
 
           {isLoading && todayNotices.length === 0 && (
@@ -78,7 +80,9 @@ export default function LandingPage() {
         <div className="mt-10 text-center">
           <h3 className="text-lg font-semibold text-gray-700">Want to see more notices?</h3>
           <p className="mb-4 text-sm text-gray-600">Sign up now to access all legal notices on Jaahir Soochna.</p>
-          <Button onClick={() => navigate("/signup")} className="bg-navy text-white hover:bg-navy-dark">Signup to Explore More</Button>
+          <Button onClick={() => navigate("/signup")} className="bg-navy text-white hover:bg-navy-dark">
+            Signup to Explore More
+          </Button>
         </div>
 
         {/* Testimonials */}
@@ -87,19 +91,22 @@ export default function LandingPage() {
           <p className="text-gray-600 mb-10">
             Trusted by lawyers and citizens across India for reliable legal notice management
           </p>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {/* Testimonial 1 */}
             <div className="bg-white border rounded-xl p-6 text-left shadow-md">
               <div className="flex items-center gap-4 mb-4">
-                <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-700">PS</div>
+                <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-700">
+                  PS
+                </div>
                 <div>
                   <h4 className="font-semibold">Priya Sharma</h4>
                   <p className="text-sm text-gray-500">Advocate, Delhi High Court</p>
                 </div>
               </div>
               <p className="italic text-gray-700 mb-4">
-                "This platform has revolutionized how I handle public notices for my clients.
-                The verification process is seamless and the search functionality is incredibly powerful."
+                "This platform has revolutionized how I handle public notices for my clients. The verification process
+                is seamless and the search functionality is incredibly powerful."
               </p>
               <div className="text-yellow-500 text-lg">★★★★★</div>
             </div>
@@ -107,15 +114,17 @@ export default function LandingPage() {
             {/* Testimonial 2 */}
             <div className="bg-white border rounded-xl p-6 text-left shadow-md">
               <div className="flex items-center gap-4 mb-4">
-                <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-700">R</div>
+                <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center font-bold text-gray-700">
+                  R
+                </div>
                 <div>
                   <h4 className="font-semibold">Rajesh Kumar</h4>
                   <p className="text-sm text-gray-500">Property Investor</p>
                 </div>
               </div>
               <p className="italic text-gray-700 mb-4">
-                "I've been able to stay informed about all property-related notices in my area.
-                The objection process is straightforward and has saved me from potential legal issues."
+                "I've been able to stay informed about all property-related notices in my area. The objection process is
+                straightforward and has saved me from potential legal issues."
               </p>
               <div className="text-yellow-500 text-lg">★★★★☆</div>
             </div>
@@ -129,11 +138,12 @@ export default function LandingPage() {
           {/* Logo & About */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <img src={img1} alt="Logo" className="h-8 w-auto" />
+              <img src={img1 || "/placeholder.svg"} alt="Logo" className="h-8 w-auto" />
               <h1 className="font-bold text-lg"></h1>
             </div>
             <p className="text-gray-400 mb-4">
-              India's trusted platform for legal public notices, connecting lawyers and citizens for transparent legal processes.
+              India's trusted platform for legal public notices, connecting lawyers and citizens for transparent legal
+              processes.
             </p>
             <div className="flex space-x-4 text-gray-400 text-lg">
               <i className="fab fa-facebook"></i>
@@ -174,11 +184,10 @@ export default function LandingPage() {
             </ul>
           </div>
         </div>
+
         <hr className="my-6 border-gray-700" />
-        <p className="text-center text-gray-500 text-xs">
-          © 2025 Jaahir Soochna. All rights reserved.
-        </p>
+        <p className="text-center text-gray-500 text-xs">© 2025 Jaahir Soochna. All rights reserved.</p>
       </footer>
     </div>
-  );
+  )
 }
