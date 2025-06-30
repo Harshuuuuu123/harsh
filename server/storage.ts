@@ -7,7 +7,7 @@ import {
   type Notice,
   type InsertNotice,
   type Objection,
-  type InsertObjection
+  type InsertObjection,
 } from "@shared/db/schema";
 import { db } from "./db";
 import { eq, desc, and, count, sql } from "drizzle-orm";
@@ -16,6 +16,7 @@ interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserById(id: number): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByName(name: string): Promise<User | undefined>;
   createUser(insertUser: InsertUser): Promise<User>;
 
   getNotices(options: {
@@ -35,17 +36,14 @@ interface IStorage {
 
   getNotice(id: number): Promise<Notice | undefined>;
   createNotice(insertNotice: InsertNotice): Promise<Notice>;
+  updateNotice(id: number, data: InsertNotice): Promise<Notice>;
+  deleteNotice(id: number): Promise<void>;
 
   createObjection(insertObjection: InsertObjection): Promise<Objection>;
   getCategoryCounts(): Promise<Record<string, number>>;
 }
 
 export class DatabaseStorage implements IStorage {
-  async getUserByName(name: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.name, name));
-    return user || undefined;
-  }
-
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user || undefined;
@@ -61,12 +59,17 @@ export class DatabaseStorage implements IStorage {
     return user || undefined;
   }
 
+  async getUserByName(name: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.name, name));
+    return user || undefined;
+  }
+
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db
       .insert(users)
       .values({
         ...insertUser,
-        role: insertUser.role as "lawyer" | "user"
+        role: insertUser.role as "lawyer" | "user",
       })
       .returning();
     return user;
@@ -82,8 +85,7 @@ export class DatabaseStorage implements IStorage {
   }): Promise<(Notice & { objectionCount: number })[]> {
     const { page, limit, category, search, dateFilter, sortBy } = options;
     const offset = (page - 1) * limit;
-
-    let conditions = [eq(notices.isActive, true)];
+    const conditions: any[] = [eq(notices.isActive, true)];
 
     if (category && category !== "all") {
       conditions.push(eq(notices.category, category));
@@ -140,7 +142,7 @@ export class DatabaseStorage implements IStorage {
         filePath: notices.filePath,
         fileName: notices.fileName,
         fileType: notices.fileType,
-        objectionCount: count(objections.id).as("objectionCount")
+        objectionCount: count(objections.id).as("objectionCount"),
       })
       .from(notices)
       .leftJoin(objections, eq(objections.noticeId, notices.id))
@@ -159,8 +161,7 @@ export class DatabaseStorage implements IStorage {
     dateFilter?: string;
   }): Promise<number> {
     const { category, search, dateFilter } = options;
-
-    let conditions = [eq(notices.isActive, true)];
+    const conditions: any[] = [eq(notices.isActive, true)];
 
     if (category && category !== "all") {
       conditions.push(eq(notices.category, category));
@@ -223,11 +224,21 @@ export class DatabaseStorage implements IStorage {
     return notice;
   }
 
-  async createObjection(insertObjection: InsertObjection): Promise<Objection> {
-    const [objection] = await db
-      .insert(objections)
-      .values(insertObjection)
+  async updateNotice(id: number, data: InsertNotice): Promise<Notice> {
+    const [updated] = await db
+      .update(notices)
+      .set(data)
+      .where(eq(notices.id, id))
       .returning();
+    return updated;
+  }
+
+  async deleteNotice(id: number): Promise<void> {
+    await db.delete(notices).where(eq(notices.id, id));
+  }
+
+  async createObjection(insertObjection: InsertObjection): Promise<Objection> {
+    const [objection] = await db.insert(objections).values(insertObjection).returning();
     return objection;
   }
 
